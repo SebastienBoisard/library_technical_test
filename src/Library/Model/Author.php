@@ -41,7 +41,13 @@ final class Author
         return $this->name;
     }
 
-    public function toArray() {
+    /**
+     * toArray converts the properties of this class to an array.
+     *
+     * @return array - the class properties as an array
+     */
+    public function toArray()
+    {
         $a = [];
 
         $a['id'] = $this->id;

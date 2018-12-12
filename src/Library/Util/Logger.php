@@ -50,10 +50,18 @@ class Logger
         return self::$_oInstance;
     }
 
-    public function disable() {
+    /**
+     * disable désactive la gestion des logs. 
+     * Cette fonction est surtout utile pour éviter que les logs viennent gêner les tests unitaires.
+     */
+    public function disable()
+    {
         $this->disabled = true;
     }
 
+    /**
+     * _createLogger créé le gestionnaire de logs grâce à différentes classes de Monolog.
+     */
     private function _createLogger()
     {
         // Création du stream gérant les logs de tous les niveaux avec une gestion rotative des logs

@@ -19,7 +19,12 @@ Les tests unitaires ont été réalisés avec le framework [PHPUnit](https://php
 
 
 ## Spécifications de l'API
- 
+
+Cette API va permettre d'interroger les informations stockées dans la base de données, dont le schéma est le suivant :
+
+![Schéma de la base de données](database_schema.png "database schema")
+
+
 ### Récupération de la fiche d'un livre 
 
 ```
@@ -62,13 +67,13 @@ Cette action doit permettre de créer la fiche d'un livre.
 
 #### Input
 
-Liste des paramétres (tous sont obligatoires)
+Liste des paramètres (tous sont obligatoires)
  - __title__, titre du livre
  - __author__, id de l'auteur
 
 #### Output 
 
-La fiche du livre créée (cf la sortie de l'api GET /books/{id} )
+La fiche du livre créée (Cf. la sortie de l'api `GET /books/:id`)
 
 
 ###  Récupération de la fiche de tous les livres
@@ -82,7 +87,7 @@ Cette action doit renvoyer les fiches de tous les livres de la bibliothèque.
  
 #### Input
  
- L'action accepte le paramétre _order_ qui peut prendre les valeurs _author_ ou _title_ et triera les livres par auteur ou par titre.
+ L'action accepte le paramètre _order_ qui peut prendre les valeurs _author_ ou _title_ et triera les livres par auteur ou par titre.
 
 #### Output 
  
@@ -136,7 +141,7 @@ Exemple :
  
  _:name_ est le nom de l'auteur en minuscule et des "_" remplacent les espaces
  
- L'action accepte le paramètre _order_ qui peut prendre les valeurs _id_ ou _title_ et triera les livres selon leurs ID ou leurs Titre.
+ L'action accepte le paramètre _order_ qui peut prendre les valeurs _id_ ou _title_ et triera les livres selon leurs identifiants ou leurs titres.
 
  #### Output 
  
@@ -282,6 +287,11 @@ Ensuite, il suffit d'installer les dépendances du projet :
 php composer.phar install
 ```
 
+## Configuration du projet
+
+Les éléments permettant l'accès à la base de données (nom de l'utilisateur, mot de passe, nom du server, etc.) sont
+à configurer dans le fichier `config\database.php`.  
+Un fichier de configuration exemple `config\database.dist.php` est présent comme modèle.  
 
 ## Tests
 
@@ -301,18 +311,19 @@ bin/phpunit
 
 Exemples de requêtes fonctionnelles : 
 
+```
 curl -v -X GET http://library/books/1
 curl -v -X GET http://library/books/6
-curl -v -X POST -d '{"author":"Baudelaire","title":"Les Fleurs du mal"}' http://library/books
+curl -v -X POST -d '{"author":1,"title":"I, Robot"}' http://library/books
 curl -v -X GET http://library/author/Isaac_Asimov/books
 curl -v -X GET http://library/books
-
+```
 
 Exemples de requêtes retournant des erreurs :
 
+```
 curl -v -X POST http://library/books
 curl -v -X POST -d '{"author":"Baudelaire"}' http://library/books
 curl -v -X POST -d '{"title":"Les Fleurs du mal"}' http://library/books
-curl -v -X POST -d '{"author":1,"title":"Livre1"}' http://library/books
-
+```
 

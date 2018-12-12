@@ -53,17 +53,33 @@ final class Book
         return $this->name;
     }
 
+    /**
+     * getAuthor returns the author object describing the author of the book.
+     *
+     * @return Author - the author object
+     */
     public function getAuthor() : Author
     {
         return $this->author;
     }
 
+    /**
+     * setAuthor sets the author object.
+     *
+     * @param Author $author - the author object
+     */
     public function setAuthor(Author $author)
     {
         $this->author = $author;
     }
 
-    public function toArray() {
+    /**
+     * toArray converts the properties of this class to an array.
+     *
+     * @return array - the class properties as an array
+     */
+    public function toArray() : array
+    {
         $a = [];
 
         $a['id'] = $this->id;

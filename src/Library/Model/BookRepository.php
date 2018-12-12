@@ -14,11 +14,6 @@ class BookRepository
      */
     private $db_conn;
 
-    /**
-     * @var string - name of the book
-     */
-    private $name;
-
 
     public function __construct(\mysqli $db_conn)
     {
@@ -108,8 +103,17 @@ class BookRepository
         return $books;
     }
 
-    public function createBook(string $book_title, int $author_id)
+    /**
+     * createBook creates a book (and inserts it in the database) from its title and its author id.
+     *
+     * @return Book - the new created book
+     * @throws Exception
+     */
+    public function createBook(string $book_title, int $author_id) : Book
     {
+        // Sanitize the book_title
+        $book_title = $this->db_conn->real_escape_string($book_title);
+
         $query = "INSERT INTO books (name, author) VALUES ('".$book_title."', ".$author_id.")";
 
         $result = $this->db_conn->query($query);
@@ -118,6 +122,7 @@ class BookRepository
             throw new \Exception("Database error with query `".$query."` (error=".$mysqli->error.")");
         }
 
+        // Get the id of the last insert, that means the book id.
         $book_id = $this->db_conn->insert_id;
 
         $book = $this->getBook($book_id);

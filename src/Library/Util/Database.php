@@ -6,35 +6,44 @@ use Library\Util\Logger;
 
 class Database
 {
-	private const DB_SERVER   = '127.0.0.1';
-	private const DB_USERNAME = 'demo_user';
-	private const DB_PASSWORD = 'eTljkdf45Tnd!D23dvoppSln49fnleq';
-	private const DB_NAME     = 'library';
-
     private $db_conn = null;
  
-    // get the database connection
-    public function getConnection() {
-		Logger::getInstance()->addDebug("BEGIN");
- 
- 		if ($this->db_conn != null) {
- 			return $this->db_conn;
- 		}
+    /** 
+     * getConnection returns the instance of the database handler if it exists, or else creates it.
+     *
+     * @return \mysqli - The database handler.
+     */
+    public function getConnection() : \mysqli
+    {
+        if ($this->db_conn != null) {
+            return $this->db_conn;
+        }
 
- 		$this->db_conn = new \mysqli(self::DB_SERVER, self::DB_USERNAME, self::DB_PASSWORD, self::DB_NAME);
+        $database_config = require(__DIR__ . '/../../../config/database.php');
 
-		if ($this->db_conn->connect_error) {
-			Logger::getInstance()->addError("Database error: ".$this->db_conn->connect_error.
-				" (error=".$this->db_conn->connect_errno.")");
-			return null;
-		}
+        $this->db_conn = new \mysqli(
+            $database_config['server'], 
+            $database_config['user_name'], 
+            $database_config['user_password'], 
+            $database_config['database_name']
+        );
 
-		return $this->db_conn;
-    }	
+        if ($this->db_conn->connect_error) {
+            Logger::getInstance()->addError("Database error: ".$this->db_conn->connect_error.
+                " (error=".$this->db_conn->connect_errno.")");
+            return null;
+        }
 
-    public function closeConnection() {
- 		if ($this->db_conn != null) {
-    		$this->db_conn->close();
-    	}
+        return $this->db_conn;
+    }   
+
+    /** 
+     * closeConnection closes the database handler.
+     */
+    public function closeConnection()
+    {
+        if ($this->db_conn != null) {
+            $this->db_conn->close();
+        }
     }
 }
